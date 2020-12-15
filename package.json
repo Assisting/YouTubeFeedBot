@@ -1,0 +1,23 @@
+{
+  "name": "youtubefeedbot",
+  "version": "0.0.0",
+  "description": "A bot that posts updates from moderator-listed YouTube channels in a moderator-defined Discord text channel.",
+  "main": "bot.js",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "google-auth-library": "^6.1.3",
+    "googleapis": "^66.0.0",
+    "rss-feed-emitter": "^3.2.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Assisting/YouTubeFeedBot.git"
+  },
+  "author": "Erik LaBine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Assisting/YouTubeFeedBot/issues"
+  },
+  "homepage": "https://github.com/Assisting/YouTubeFeedBot#readme"
+}
