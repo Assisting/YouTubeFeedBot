@@ -1,6 +1,7 @@
 const RssFeedEmitter = require('rss-feed-emitter');
 const feeder = new RssFeedEmitter({ skipFirstLoad: true });
 const discord = require('discord.js');
+const sqlite3 = require('sqlite3');
 const { google } = require('googleapis'); 
 const { prefix } = require('./config.json');
 const { discordToken, youTubeToken } = require('./secrets.json');
@@ -8,6 +9,7 @@ const { discordToken, youTubeToken } = require('./secrets.json');
 const youTubeRSS = 'https://www.youtube.com/feeds/videos.xml?channel_id=';
 const discordClient = new discord.Client();
 const youTubeClient = google.youtube('v3');
+const database = new sqlite3.Database('./server-data.db');
 const serverChannel = {};
 const serverSubscription = {};
 
@@ -31,13 +33,13 @@ const alertTheMasses = (item) => {
     {
         if(serverSubscription[server].includes(item['yt:channelid']['#']))
         {
-            serverChannel[server].send(item.link);
+            textChannelFromChannelID(serverChannel[server]).send(item.link);
         }
     }
 };
 
 const defineBotRoom = (serverId, channel, silent) => {
-    serverChannel[serverId] = channel;
+    serverChannel[serverId] = channel.channelId;
     if (!silent)
     {
         channel.send(`YouTube Feed will post to #${channel.name}`);
@@ -95,4 +97,15 @@ const subscribeFromVideoLink = async (videoId, message, silent) => {
     } catch (err) {
         console.error(err);
     }
+};
+
+const textChannelFromChannelID = (channelId) => {
+    for (const discordChannel in discordClient.channels.cache)
+    {
+        if (discordChannel.channelId == channelId) {
+            return discordChannel;
+        }
+    }
+
+    return null;
 };
