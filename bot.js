@@ -22,7 +22,7 @@ feeder.on('error', console.error);
 const addChannel = (channelId) => {
     feeder.add({
         url: `${youTubeRSS}${channelId}`,
-        refresh: 60,
+        refresh: 600,
     });
 };
 
@@ -74,7 +74,7 @@ const serverSubscribe = (message, silent) => {
     } else if (message.content.split('youtubeadd')[1].trim().startsWith('UC')) {
         const channelId = message.content.split('youtubeadd')[1].trim();
         addChannel(channelId);
-        addSubscription(message.guild.id, channelId)
+        addSubscription(message.guild.id, channelId);
     } else {
         message.channel.send('Please either provide a channel ID (not a channel name) or a video link.');
     }
@@ -85,7 +85,7 @@ const subscribeFromVideoLink = async (videoId, message, silent) => {
         const videoResult = await youTubeClient.videos.list({key: youTubeToken, part: 'snippet', id: videoId});
         const videoData = videoResult.data.items[0].snippet;
         addChannel(videoData.channelId);
-        addSubscription(message.guild.id, videoData.channelId)
+        addSubscription(message.guild.id, videoData.channelId);
         if (videoData.channelTitle && videoData.channelTitle.length > 0 && !silent)
         {
             message.channel.send(`Subscribing to ${videoData.channelTitle}`);
